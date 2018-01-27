@@ -21,11 +21,13 @@ import AddDepartment from "../../views/Department/Add";
 import EditDepartment from "../../views/Department/Edit";
 //Mission
 import Mission from "../../views/Mission/Mission";
+import AddMission from "../../views/Mission/Add";
 const ToastMessageFactory = createFactory(ToastMessage.animation);
 
 class Full extends Component {
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user.dataLogin == null) {
+    if (nextProps.user && nextProps.user.dataLogin == null) {
+      console.log("Receive props user Full ====> ", nextProps.user)
       this.props.history.push("/login");
     }
   }
@@ -37,7 +39,7 @@ class Full extends Component {
   }
 
   render() {
-    let container;
+    console.log("")
     return (
       <div className="app">
         <Header />
@@ -88,6 +90,12 @@ class Full extends Component {
                   path="/mission"
                   name="Mission"
                   component={Mission}
+                />
+                <Route
+                  exact
+                  path="/mission/add"
+                  name="Add"
+                  component={AddMission}
                 />
                 <Redirect from="/" to="/dashboard" />
               </Switch>

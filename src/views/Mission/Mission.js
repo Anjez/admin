@@ -1,26 +1,34 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { Card, CardHeader, CardBody, Row, Col, Table, Button } from "reactstrap";
+import {
+  Card,
+  CardHeader,
+  CardBody,
+  Row,
+  Col,
+  Table,
+  Button
+} from "reactstrap";
 import DatePicker from "react-datepicker";
 import moment from "moment";
 import "react-datepicker/dist/react-datepicker.css";
 import Paginator from "./../../components/Paginator/Paginator";
 import { getWhere } from "./../../api/firebase";
-import Depatments from "./../../components/Select/Depatments";
+import Departments from "./../../components/Select/Departments";
 import Employees from "./../../components/Select/Employees";
 import DepartmentItem from "./../../components/Department/DepartmentItem";
 import _ from "lodash";
 
-class Department extends Component {
+class Missions extends Component {
   constructor(props) {
     super(props);
     this.state = {
       items: [],
       searchItems: [],
       searchValue: "",
-      startDate: moment(),
-      endDate: moment(),
+      startDate: null,
+      endDate: null,
       start: 1,
       limit: 2
     };
@@ -53,20 +61,35 @@ class Department extends Component {
     }
   }
 
-  search(value) {
-    
-    console.log('state search ===> ',  this.state)
-    // this.setState({
-    //   searchValue: value
-    // });
-    // let searchResult = this.state.items;
-    // if (value != "") {
-    //   searchResult = _.filter(this.state.searchItems, user => {
-    //     return user.name.includes(value) || user.description.includes(value);
-    //   });
-    // }
+  search() {
+    let searchResult = [];
+    console.log(this.state.startDate.format("Y-M-D"));
+    searchResult = _.filter(this.state.searchItems, user => {
+      let byDate = false;
+      let byDepartment = false;
+      let byEmployee = false;
+      if (this.state.startDate) {
+        byDate =
+          this.state.startDate.format("Y-M-D") ==
+          moment(mission.date).format("Y-M-D");
+      }
+      if (this.state.startDate && this.state.endDate) {
+        byDate =
+          moment(mission.date).format("Y-M-D") >=
+            this.state.startDate.format("Y-M-D") &&
+          moment(mission.date).format("Y-M-D") <=
+            his.state.endDate.format("Y-M-D");
+      }
+      if (this.state.department) {
+        byDepartment = this.state.department == mission.department;
+      }
+      if (this.state.employee) {
+        byEmployee = this.state.employee == mission.employee;
+      }
+      return byDate || byDepartment || byEmployee;
+    });
 
-    // this.setState({ searchItems: searchResult });
+    this.setState({ searchItems: searchResult });
   }
 
   handleDelete(id) {
@@ -112,7 +135,7 @@ class Department extends Component {
     } else {
       content = (
         <tr>
-          <td colSpan="7" className="text-center">
+          <td colSpan="8" className="text-center">
             No data
           </td>
         </tr>
@@ -130,10 +153,25 @@ class Department extends Component {
           <CardHeader>
             <Row>
               <Col xs={2}>
+                <Departments
+                  onChange={v => {
+                    this.setState({ employee: v });
+                  }}
+                />
+              </Col>
+              <Col xs={2}>
+                <Employees
+                  onChange={v => {
+                    this.setState({ employee: v });
+                  }}
+                />
+              </Col>
+              <Col xs={2}>
                 <DatePicker
                   type="text"
-                  placeholder="Start Date"
+                  placeholderText="تاريخ البداية"
                   className="form-control"
+                  isClearable={true}
                   selected={this.state.startDate}
                   onChange={this.handleStartDate}
                 />
@@ -141,27 +179,39 @@ class Department extends Component {
               <Col xs={2}>
                 <DatePicker
                   type="text"
-                  placeholder="Start Date"
+                  placeholderText="تاريخ النهاية"
                   className="form-control"
+                  isClearable={true}
                   selected={this.state.endDate}
                   onChange={this.handleEndtDate}
                 />
               </Col>
-              <Col xs={2}>
-                <Depatments />
+              <Col xs={1}>
+                <Button
+                  className="btn btn-sm btn-success"
+                  onClick={this.search}
+                >
+                  <i className="icon-magnifier" />
+                </Button>
               </Col>
-              <Col xs={2}>
-                <Employees onChange={(v) => {this.setState({employee: v})}} />
-              </Col>
-              <Col xs={2}>
-              <Button className="btn btn-sm"><i className="icon-magnifier" /></Button>
+              <Col xs={1}>
+                <Button
+                  className="btn btn-sm btn-warning"
+                  onClick={() =>
+                    this.setState(prevState => ({
+                      searchItems: prevState.items
+                    }))
+                  }
+                >
+                  <i className="fa fa-close" />
+                </Button>
               </Col>
               <Col xs={2}>
                 <Link
-                  to={"/department/add"}
+                  to={"/mission/add"}
                   className="btn btn-success float-left"
                 >
-                  إظافة دائرة
+                  إظافة مهمة
                 </Link>
               </Col>
             </Row>
@@ -207,4 +257,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, null)(Department);
+export default connect(mapStateToProps, null)(Missions);

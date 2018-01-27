@@ -1,9 +1,10 @@
 import React, { PureComponent } from "react";
+import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Select from "react-select";
-import "react-select/dist/react-select.css";
+import "react-datepicker/dist/react-datepicker.css";
 import { getWhere } from "./../../api/firebase";
-class Dapartments extends PureComponent {
+class Departments extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -35,6 +36,7 @@ class Dapartments extends PureComponent {
 
   handleChange(selectedOption) {
     this.setState({ selectedOption });
+    this.props.onChange(selectedOption);
   }
   render() {
     const { selectedOption } = this.state;
@@ -50,9 +52,12 @@ class Dapartments extends PureComponent {
     );
   }
 }
+Departments.propTypes = {
+  onChange: PropTypes.func
+};
 function mapStateToProps(state) {
   return {
     user: state.user
   };
 }
-export default connect(mapStateToProps, null)(Dapartments);
+export default connect(mapStateToProps, null)(Departments);

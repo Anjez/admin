@@ -7,5 +7,6 @@ const routes = {
   '/department/add': 'إظافة دائرة',
   '/department/edit': 'تعديل دائرة',
   '/mission': 'إدارة المهام',
+  '/mission/add': 'إظافة المهام',
 };
 export default routes;
