@@ -35,6 +35,7 @@ class Employees extends PureComponent {
   }
 
   handleChange(selectedOption) {
+    console.log("selected value employee ", selectedOption)
     this.setState({ selectedOption });
     this.props.onChange(selectedOption);
   }

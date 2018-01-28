@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import {
@@ -17,10 +17,10 @@ import Paginator from "./../../components/Paginator/Paginator";
 import { getWhere } from "./../../api/firebase";
 import Departments from "./../../components/Select/Departments";
 import Employees from "./../../components/Select/Employees";
-import DepartmentItem from "./../../components/Department/DepartmentItem";
+import MissionItem from "./../../components/Missions/MissionItem";
 import _ from "lodash";
 
-class Missions extends Component {
+class Missions extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -33,7 +33,7 @@ class Missions extends Component {
       limit: 2
     };
     this.search = this.search.bind(this);
-    this.renderDepartment = this.renderDepartment.bind(this);
+    this.renderMission = this.renderMission.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleStartDate = this.handleStartDate.bind(this);
     this.handleEndtDate = this.handleEndtDate.bind(this);
@@ -42,7 +42,7 @@ class Missions extends Component {
   componentDidMount() {
     const { user } = this.props;
     if (user.dataLogin) {
-      getWhere("missions", "==", "userId", user.dataLogin.uid).then(
+      getWhere("missions", "==", "parentId", user.dataLogin.uid).then(
         department => {
           let arrayData = [];
           department.forEach(doc => {
@@ -63,30 +63,24 @@ class Missions extends Component {
 
   search() {
     let searchResult = [];
-    console.log(this.state.startDate.format("Y-M-D"));
-    searchResult = _.filter(this.state.searchItems, user => {
-      let byDate = false;
-      let byDepartment = false;
-      let byEmployee = false;
+    searchResult = _.filter(this.state.searchItems, mission => {
+      let search = true;
       if (this.state.startDate) {
-        byDate =
-          this.state.startDate.format("Y-M-D") ==
-          moment(mission.date).format("Y-M-D");
+        search = search && this.state.startDate.isBefore(mission.date);
       }
       if (this.state.startDate && this.state.endDate) {
-        byDate =
-          moment(mission.date).format("Y-M-D") >=
-            this.state.startDate.format("Y-M-D") &&
-          moment(mission.date).format("Y-M-D") <=
-            his.state.endDate.format("Y-M-D");
+        serach =
+          search &&
+          this.state.startDate.isBefore(mission.date) &&
+          this.state.endDate.isAfter(mission.date);
       }
       if (this.state.department) {
-        byDepartment = this.state.department == mission.department;
+        search =search && this.state.department.value == mission.department.value;
       }
       if (this.state.employee) {
-        byEmployee = this.state.employee == mission.employee;
+        search = search && this.state.employee.value == mission.employee.value;
       }
-      return byDate || byDepartment || byEmployee;
+      return search;
     });
 
     this.setState({ searchItems: searchResult });
@@ -106,13 +100,15 @@ class Missions extends Component {
   }
 
   handleStartDate(date) {
+    console.log("Start", date);
     this.setState({ startDate: date });
   }
   handleEndtDate(date) {
+    console.log("End", date);
     this.setState({ endDate: date });
   }
 
-  renderDepartment() {
+  renderMission() {
     let content = null;
     const { start, limit } = this.state;
     const indexOfLastTodo = start * limit;
@@ -123,10 +119,10 @@ class Missions extends Component {
       for (let i = indexOfFirstTodo; i < indexOfLastTodo; i++) {
         if (this.state.searchItems[i]) {
           content.push(
-            <DepartmentItem
+            <MissionItem
               key={i}
               id={i}
-              department={this.state.searchItems[i]}
+              mission={this.state.searchItems[i]}
               handleDelete={id => this.handleDelete(id)}
             />
           );
@@ -224,17 +220,16 @@ class Missions extends Component {
             >
               <thead className="thead-light">
                 <tr>
-                  <th>إسم الدائرة</th>
-                  <th>العنوان</th>
-                  <th>المنطقة</th>
-                  <th>المحافظة</th>
-                  <th>اسم المسؤول</th>
-                  <th>الهاتف</th>
-                  <th>البريد الالكتروني</th>
+                  <th>عنوانالمهمة</th>
+                  <th>التفاصيل</th>
+                  <th>الدائرة</th>
+                  <th>الموظف</th>
+                  <th>التاريخ</th>
+                  <th>الحالة</th>
                   <th />
                 </tr>
               </thead>
-              <tbody>{this.renderDepartment()}</tbody>
+              <tbody>{this.renderMission()}</tbody>
             </Table>
             <Paginator
               count={this.state.items.length}

@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import "react-select/dist/react-select.css";
 import DatePicker from "react-datepicker";
 import moment from "moment";
+import { add } from "./../../api/firebase";
 import Departments from "./../../components/Select/Departments";
 import Employees from "./../../components/Select/Employees";
 import {
@@ -37,12 +38,18 @@ class Add extends Component {
     e.preventDefault();
     const data = {
       parentId: user.dataLogin.uid,
+      employee: this.state.employee,
       department: this.state.department,
       title: this.state.title,
       description: this.state.description,
-      employee: this.state.employee,
-      date: this.state.date.unix()
+      date: this.state.date.toDate(),
+      closing: null,
+      status: "C",
+      created: moment().unix()
     };
+    console.log("data to create mission ==> ", data)
+    add("missions", data);
+    this.props.history.push("/mission");
   }
 
   render() {
@@ -89,7 +96,7 @@ class Add extends Component {
                             name="name"
                             placeholder="عنوان المهمة"
                             onChange={e =>
-                              this.setState({ name: e.target.value })
+                              this.setState({ title: e.target.value })
                             }
                             required
                           />
@@ -122,7 +129,7 @@ class Add extends Component {
                             minDate={moment()}
                             isClearable={true}
                             selected={this.state.date}
-                            onChange={this.handleDate}
+                            onChange={(date) => this.setState({ date: date })}
                           />
                         </Col>
                       </FormGroup>

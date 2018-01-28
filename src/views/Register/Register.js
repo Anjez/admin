@@ -71,7 +71,7 @@ class Register extends Component {
                       </InputGroupAddon>
                       <Input
                         type="text"
-                        placeholder="Username"
+                        placeholder="الإسم"
                         onChange={e =>
                           this.setState({ username: e.target.value })
                         }
@@ -82,7 +82,7 @@ class Register extends Component {
                       <InputGroupAddon>@</InputGroupAddon>
                       <Input
                         type="email"
-                        placeholder="Email"
+                        placeholder="الإيميل"
                         onChange={e => this.setState({ email: e.target.value })}
                         required
                       />
@@ -93,7 +93,7 @@ class Register extends Component {
                       </InputGroupAddon>
                       <Input
                         type="password"
-                        placeholder="Password"
+                        placeholder="كلمة السر"
                         className={this.state.classError}
                         onChange={e =>
                           this.setState({ password: e.target.value })
@@ -107,7 +107,7 @@ class Register extends Component {
                       </InputGroupAddon>
                       <Input
                         type="password"
-                        placeholder="Repeat password"
+                        placeholder="إعادة كلة السر"
                         className={this.state.classError}
                         onChange={e => {
                           let classError =
@@ -123,7 +123,7 @@ class Register extends Component {
                       />
                     </InputGroup>
                     <Button type="submit" color="success" block>
-                      Create Account
+                      التسجيل
                     </Button>
                   </CardBody>
                 </Card>

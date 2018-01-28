@@ -54,15 +54,15 @@ class Login extends Component {
                 <Card className="p-4">
                   <CardBody>
                     <Form onSubmit={this.handleSubmit}>
-                      <h1>Login</h1>
-                      <p className="text-muted">Sign In to your account</p>
+                      <h1 className="text-right">تسجيل الدخول</h1>
+                      <p className="text-muted text-right">إدخل بيانات الدخول إلى حسابك</p>
                       <InputGroup className="mb-3">
                         <InputGroupAddon>
                           <i className="icon-user" />
                         </InputGroupAddon>
                         <Input
                           type="email"
-                          placeholder="Email"
+                          placeholder="الإيميل"
                           onChange={e =>
                             this.setState({ email: e.target.value })
                           }
@@ -75,7 +75,7 @@ class Login extends Component {
                         </InputGroupAddon>
                         <Input
                           type="password"
-                          placeholder="Password"
+                          placeholder="كلمة السر"
                           onChange={e =>
                             this.setState({ password: e.target.value })
                           }
@@ -89,14 +89,14 @@ class Login extends Component {
                             className="px-4"
                             type="submit"
                           >
-                            Login
+                            دخول
                           </Button>
                         </Col>
-                        <Col xs="6" className="text-right">
+                        {/* <Col xs="6" className="text-right">
                           <Button color="link" className="px-0">
                             Forgot password?
                           </Button>
-                        </Col>
+                        </Col> */}
                       </Row>
                     </Form>
                   </CardBody>
@@ -107,18 +107,16 @@ class Login extends Component {
                 >
                   <CardBody className="text-center">
                     <div>
-                      <h2>Sign up</h2>
+                      <h2>التسجيل</h2>
                       <p>
-                        Lorem ipsum dolor sit amet, consectetur adipisicing
-                        elit, sed do eiusmod tempor incididunt ut labore et
-                        dolore magna aliqua.
+                        فقرة فيها وصف للتطبيقة
                       </p>
                       <Link
                         to={"/register"}
                         color="link"
-                        className="btn btn-primary"
+                        className="btn btn-info"
                       >
-                        Register Now!
+                        التسجيل
                       </Link>
                     </div>
                   </CardBody>
